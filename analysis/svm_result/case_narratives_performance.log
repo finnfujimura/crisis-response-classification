@@ -1,0 +1,8 @@
+Model accuracy: 0.6600
+
+Confusion Matrix:
+            Behavioral  Both  Medical  Other
+Behavioral          39     0        0      1
+Both                 5     0        2      2
+Medical              3     1       13      3
+Other               17     0        0     14

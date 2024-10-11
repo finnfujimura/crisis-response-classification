@@ -1,0 +1,10 @@
+Distribution: 
+ModeOfIntervention
+Behavioral    82
+Other         57
+Medical       41
+Both          19
+Name: count, dtype: int64
+
+Model accuracy: 0.6600
+
