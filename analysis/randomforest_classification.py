@@ -1,8 +1,3 @@
-# TF-IDF Random Forest Classification
-# using CAHOOTS Case Narratives
-#
-# Script by Aussie Frost
-# Updated on Sept 24, 2024
 
 import numpy as np
 import pandas as pd
@@ -18,7 +13,7 @@ from graphviz import Source
 from matplotlib import pyplot as plt
 
 # Initialize TF-IDF Vectorizer outside the function
-tfidf = TfidfVectorizer(max_features=300, stop_words='english')
+tfidf = TfidfVectorizer(max_features=1000, stop_words='english')
 
 # Initialize Random Forest Classifier outside the function
 clf = RandomForestClassifier(n_estimators=300, class_weight='balanced')
