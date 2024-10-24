@@ -1,8 +1,3 @@
-# TF-IDF Linear SVM Classification
-# using CAHOOTS Case Narratives
-#
-# Script by Aussie Frost
-# Updated on Sept 24, 2024
 
 import numpy as np
 import pandas as pd
@@ -15,8 +10,8 @@ from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDis
 
 from matplotlib import pyplot as plt
 
-# Initialize TF-IDF Vectorizer outside the function
-tfidf = TfidfVectorizer(max_features=300, stop_words='english')
+# Initialize TF-IDF Vectorizer with more features and n-grams
+tfidf = TfidfVectorizer(max_features=1000, stop_words='english', ngram_range=(1, 2))
 
 # Initialize LinearSVC outside the function
 clf = LinearSVC(C=1.0, max_iter=1000)
@@ -30,14 +25,17 @@ def classify_case_narratives(data_path, test_size=0.50):
     # Read the data into DataFrame
     data = pd.read_csv(data_path)
 
-    # Merge on axis
-    data['Merged'] = data.apply(lambda row: ' '.join(row.values.astype(str)), axis=1)
+    # Exclude 'Homeless' and 'Call Sign' columns
+    feature_columns = data.columns.difference(['Homeless', 'Call Sign', 'ModeofIntervention'])
 
     # Split data into X, y
-    X, y = data['Merged'], data['ModeOfIntervention']
+    X, y = data[feature_columns], data['ModeOfIntervention']
+
+    # Merge the text from each column into a single string for each row
+    X['Merged'] = X.apply(lambda row: ' '.join(row.values.astype(str)), axis=1)
 
     # Split arrays into random train and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+    X_train, X_test, y_train, y_test = train_test_split(X['Merged'], y, test_size=test_size)
 
     # Use TF-IDF to convert X text data into numerical features
     X_train_tfidf = tfidf.fit_transform(X_train)
@@ -62,7 +60,7 @@ def classify_case_narratives(data_path, test_size=0.50):
     # Output the test results to a CSV
     results.to_csv(results_csv_path)
     
-       # Create and plot a confusion matrix
+    # Create and plot a confusion matrix
     cm = confusion_matrix(y_test, y_pred)
     disp = ConfusionMatrixDisplay(cm, display_labels=clf.classes_.astype(str))
     disp.plot(cmap='viridis')
